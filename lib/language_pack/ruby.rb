@@ -472,7 +472,13 @@ def attribute(name, value, force_string = false)
 end
 
 adapter = uri.scheme
-adapter = "postgresql" if adapter == "postgres"
+
+if adapter == "postgres"
+  adapter = "postgresql"
+
+  # To support EventMachine postgresql
+  adapter = "em_postgresql" if gem_is_bundled?("em-postgresql-adapter")
+end
 
 database = (uri.path || "").split("/")[1]
 
