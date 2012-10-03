@@ -442,6 +442,14 @@ ERROR
     log("create_database_yml") do
       return unless File.directory?("config")
       topic("Writing config/database.yml to read from DATABASE_URL")
+
+      # To support EventMachine postgresql
+      using_em_postgresql = gem_is_bundled?("em-postgresql-adapter")
+
+      if using_em_postgresql
+        topic("'em-postgresql-adapter' gem detected. Will use adapter 'em_postgresql'")
+      end
+
       File.open("config/database.yml", "w") do |file|
         file.puts <<-DATABASE_YML
 <%
@@ -471,13 +479,13 @@ def attribute(name, value, force_string = false)
   end
 end
 
+using_em_postgresql = #{using_em_postgresql}
+
 adapter = uri.scheme
 
 if adapter == "postgres"
-  adapter = "postgresql"
-
-  # To support EventMachine postgresql
-  adapter = "em_postgresql" if gem_is_bundled?("em-postgresql-adapter")
+  adapter = "postgresql"  
+  adapter = "em_postgresql" if using_em_postgresql
 end
 
 database = (uri.path || "").split("/")[1]
