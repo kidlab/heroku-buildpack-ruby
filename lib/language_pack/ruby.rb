@@ -482,6 +482,8 @@ end
 using_em_postgresql = #{using_em_postgresql}
 
 adapter = uri.scheme
+pool = (ENV["DATABASE_POOL"].blank? ? 20 : ENV["DATABASE_POOL"])
+connections = (ENV["DATABASE_CONNECTIONS"].blank? ? nil : ENV["DATABASE_CONNECTIONS"])
 
 if adapter == "postgres"
   adapter = "postgresql"  
@@ -507,6 +509,10 @@ params = CGI.parse(uri.query || "")
   <%= attribute "password", password, true %>
   <%= attribute "host",     host %>
   <%= attribute "port",     port %>
+  <%= attribute "pool",     pool %>
+  <% if connections %>
+    <%= attribute "connections", connections %>
+  <% end %>
 
 <% params.each do |key, value| %>
   <%= key %>: <%= value.first %>
