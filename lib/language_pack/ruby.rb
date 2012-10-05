@@ -511,7 +511,7 @@ params = CGI.parse(uri.query || "")
   <%= attribute "port",     port %>
   <%= attribute "pool",     pool %>
   <% if connections %>
-    <%= attribute "connections", connections %>
+  <%= attribute "connections", connections %>
   <% end %>
 
 <% params.each do |key, value| %>
