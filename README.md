@@ -101,6 +101,42 @@ Example Usage:
 
 The buildpack will detect your apps as a Rails 3 app if it has an `application.rb` file in the `config` directory.
 
+#### Use em-postgresql-adapter on Heroku
+
+This build is designed to detect and write a `database.yml` for `em-postgresql-adapter`, so that you can apply the "Async-Rails" technique described by Ilya Grigorik at https://github.com/igrigorik/async-rails. Here are steps to do this:
+
+(1) add these gem to your `Gemfile`:
+    
+    gem 'rack-fiber_pool', :require => 'rack/fiber_pool'
+    gem 'eventmachine', '>= 1.0.0'
+    gem 'em-postgresql-adapter', :git => 'git://github.com/leftbee/em-postgresql-adapter.git'
+    gem 'em-synchrony', :git => 'git://github.com/igrigorik/em-synchrony.git',
+                        :require => ['em-synchrony',
+                                     'em-synchrony/activerecord']
+    gem 'em-http-request', :require => 'em-http'
+
+
+(2) Then modify the `config.ru` file:
+
+    use Rack::FiberPool, :size => 100
+
+You can change the pool size.
+
+(3) You can also apply some more advanced configuration for the DB connection. From terminal, login to your Heroku account, the add these env variables:
+
+    heroku config:add DATABASE_POOL=20 --app <your-app-name>
+    heroku config:add DATABASE_CONNECTIONS=5 <your-app-name>
+
+Be careful when set these variables because the Heroku Postgres Dev limits only 20 connections pool. See https://devcenter.heroku.com/articles/heroku-postgres-starter-tier#limits.
+
+(4) Use the custom Heroku buildpack:
+
+    heroku config:add BUILDPACK_URL=https://github.com/kidlab/heroku-buildpack-ruby --app <your-app-name>
+
+See more at: https://devcenter.heroku.com/articles/buildpacks#using-a-custom-buildpack
+
+You can see another fork of Async-Rails for PostgreSQL at https://github.com/jackquack/async-rails32_postgres
+
 #### Assets
 
 To enable static assets being served on the dyno, [rails3_serve_static_assets](http://github.com/pedro/rails3_serve_static_assets) is installed by default. If the [execjs gem](http://github.com/sstephenson/execjs) is detected then [node.js](http://github.com/joyent/node) will be vendored. The `assets:precompile` rake task will get run if no `public/manifest.yml` is detected.  See [this article](http://devcenter.heroku.com/articles/rails31_heroku_cedar) on how rails 3.1 works on cedar.
