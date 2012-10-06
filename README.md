@@ -125,7 +125,7 @@ You can change the pool size.
 (3) You can also apply some more advanced configuration for the DB connection. From terminal, login to your Heroku account, the add these env variables:
 
     heroku config:add DATABASE_POOL=20 --app <your-app-name>
-    heroku config:add DATABASE_CONNECTIONS=5 <your-app-name>
+    heroku config:add DATABASE_CONNECTIONS=5 --app <your-app-name>
 
 Be careful when set these variables because the Heroku Postgres Dev limits only 20 connections pool. See https://devcenter.heroku.com/articles/heroku-postgres-starter-tier#limits.
 

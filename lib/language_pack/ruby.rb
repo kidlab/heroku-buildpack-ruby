@@ -46,8 +46,8 @@ class LanguagePack::Ruby < LanguagePack::Base
   end
 
   def compile
-    log("BUILD_DIR: #{build_path}")
-    log("CACHE_DIR: #{cache_path}")
+    puts "BUILD_DIR: #{build_path}"
+    puts "CACHE_DIR: #{cache_path}"
 
     Dir.chdir(build_path)
     remove_vendor_bundle
