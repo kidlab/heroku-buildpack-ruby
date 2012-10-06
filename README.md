@@ -103,9 +103,9 @@ The buildpack will detect your apps as a Rails 3 app if it has an `application.r
 
 #### Use em-postgresql-adapter on Heroku
 
-This build is designed to detect and write a `database.yml` for `em-postgresql-adapter`, so that you can apply the "Async-Rails" technique described by Ilya Grigorik at https://github.com/igrigorik/async-rails. Here are steps to do this:
+This buildpack is designed to detect and write a `database.yml` file for `em-postgresql-adapter`, so that you can apply the "Async-Rails" technique described by Ilya Grigorik at https://github.com/igrigorik/async-rails. Here are steps to do this:
 
-(1) add these gem to your `Gemfile`:
+(1) Add these gems to your `Gemfile`:
     
     gem 'rack-fiber_pool', :require => 'rack/fiber_pool'
     gem 'eventmachine', '>= 1.0.0'
